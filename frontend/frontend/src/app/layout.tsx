@@ -4,7 +4,7 @@ import { APP_CONFIG } from '@/lib/config';
 import { DEFAULT_METADATA } from '@/lib/metadata';
 import { Toaster } from '@/components/ui/toaster';
 import { ThemeProvider } from '@/components/providers/theme-provider';
-import { AuthProvider } from '@/components/providers/auth-provider';
+import { AuthProvider } from '@/contexts/auth-context';
 import { QueryProvider } from '@/components/providers/query-provider';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
@@ -65,10 +65,11 @@ export default function RootLayout({
     <html lang="fr" suppressHydrationWarning>
       <body
         className={cn(
-          'min-h-screen bg-background font-sans antialiased flex flex-col',
+          'min-h-screen bg-background font-sans antialiased',
           inter.variable,
           poppins.variable,
-          robotoMono.variable
+          robotoMono.variable,
+          'flex flex-col'
         )}
       >
         <ThemeProvider
@@ -79,11 +80,11 @@ export default function RootLayout({
         >
           <QueryProvider>
             <AuthProvider>
-              <Header />
-              <main className="flex-1">
-                {children}
-              </main>
-              <Footer />
+              <div className="flex flex-col min-h-screen">
+                <Header />
+                <main className="flex-1">{children}</main>
+                <Footer />
+              </div>
               <Toaster />
             </AuthProvider>
           </QueryProvider>
