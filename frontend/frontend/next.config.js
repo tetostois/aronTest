@@ -3,6 +3,9 @@ const path = require('path');
 
 const nextConfig = {
   reactStrictMode: true,
+  images: {
+    domains: ['images.unsplash.com'],
+  },
   webpack: (config) => {
     // Configuration des alias d'importation
     config.resolve.alias = {

@@ -51,21 +51,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* En-tête avec barre de recherche */}
-      <header className="bg-white dark:bg-gray-800 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-gray-400" />
-            </div>
-            <Input
-              type="text"
-              placeholder="Rechercher un restaurant, une cuisine ou un plat..."
-              className="pl-10 w-full"
-            />
-          </div>
-        </div>
-      </header>
+      
 
       <main className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
