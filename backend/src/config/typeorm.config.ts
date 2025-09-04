@@ -11,7 +11,7 @@ config({ path: '.env' });
 const dbConfig = databaseConfig();
 
 const typeOrmConfig: TypeOrmModuleOptions & Partial<DataSourceOptions> = {
-  type: 'postgres',
+  type: 'mysql',
   host: dbConfig.host,
   port: dbConfig.port,
   username: dbConfig.username,
@@ -22,8 +22,11 @@ const typeOrmConfig: TypeOrmModuleOptions & Partial<DataSourceOptions> = {
   logging: dbConfig.logging,
   migrations: [__dirname + '/../migrations/*{.ts,.js}'],
   migrationsRun: true,
-  ssl: dbConfig.ssl as any,
   migrationsTableName: 'migrations',
+  timezone: dbConfig.timezone,
+  charset: dbConfig.charset,
+  supportBigNumbers: dbConfig.supportBigNumbers,
+  bigNumberStrings: dbConfig.bigNumberStrings,
 };
 
 export const getTypeOrmConfig = (configService: ConfigService): TypeOrmModuleOptions => ({
@@ -35,7 +38,10 @@ export const getTypeOrmConfig = (configService: ConfigService): TypeOrmModuleOpt
   database: configService.get<string>('database.database', dbConfig.database),
   synchronize: configService.get<boolean>('database.synchronize', dbConfig.synchronize),
   logging: configService.get<boolean>('database.logging', dbConfig.logging),
-  ssl: configService.get<boolean>('database.ssl', dbConfig.ssl as boolean) ? { rejectUnauthorized: false } : false,
+  timezone: configService.get<string>('database.timezone', dbConfig.timezone),
+  charset: configService.get<string>('database.charset', dbConfig.charset),
+  supportBigNumbers: configService.get<boolean>('database.supportBigNumbers', dbConfig.supportBigNumbers),
+  bigNumberStrings: configService.get<boolean>('database.bigNumberStrings', dbConfig.bigNumberStrings),
 });
 
 export default typeOrmConfig;

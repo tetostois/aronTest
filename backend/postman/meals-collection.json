@@ -1,0 +1,153 @@
+{
+  "info": {
+    "name": "Meals API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Collection pour tester les endpoints de l'API des repas"
+  },
+  "item": [
+    {
+      "name": "Créer un repas",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"Pizza Margherita\",\n    \"description\": \"Pizza classique avec sauce tomate et mozzarella\",\n    \"price\": 12.99,\n    \"imageUrl\": \"https://example.com/images/pizza.jpg\",\n    \"isAvailable\": true,\n    \"restaurantId\": \"123e4567-e89b-12d3-a456-426614174000\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/meals",
+          "host": ["{{base_url}}"],
+          "path": ["meals"]
+        }
+      }
+    },
+    {
+      "name": "Récupérer tous les repas",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/meals",
+          "host": ["{{base_url}}"],
+          "path": ["meals"]
+        }
+      }
+    },
+    {
+      "name": "Récupérer les repas d'un restaurant",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/meals?restaurantId=123e4567-e89b-12d3-a456-426614174000",
+          "host": ["{{base_url}}"],
+          "path": ["meals"],
+          "query": [
+            {
+              "key": "restaurantId",
+              "value": "123e4567-e89b-12d3-a456-426614174000"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Récupérer un repas par ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/meals/123e4567-e89b-12d3-a456-426614174001",
+          "host": ["{{base_url}}"],
+          "path": ["meals", "123e4567-e89b-12d3-a456-426614174001"]
+        }
+      }
+    },
+    {
+      "name": "Mettre à jour un repas",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"Pizza Margherita Deluxe\",\n    \"description\": \"Pizza classique avec sauce tomate, mozzarella et basilic frais\",\n    \"price\": 14.99,\n    \"isAvailable\": true\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/meals/123e4567-e89b-12d3-a456-426614174001",
+          "host": ["{{base_url}}"],
+          "path": ["meals", "123e4567-e89b-12d3-a456-426614174001"]
+        }
+      }
+    },
+    {
+      "name": "Supprimer un repas",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/meals/123e4567-e89b-12d3-a456-426614174001",
+          "host": ["{{base_url}}"],
+          "path": ["meals", "123e4567-e89b-12d3-a456-426614174001"]
+        }
+      }
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{access_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000/api"
+    },
+    {
+      "key": "access_token",
+      "value": "votre_jwt_token_ici"
+    }
+  ]
+}

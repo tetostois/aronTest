@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { Restaurant } from '../../restaurants/entities/restaurant.entity';
 import { Review } from '../../reviews/entities/review.entity';
+import { Order } from '../../orders/entities/order.entity';
 
 export enum UserRole {
   ADMIN = 'admin',
@@ -46,11 +47,14 @@ export class User {
   @Column({ type: 'boolean', default: true })
   isActive: boolean;
 
-  @OneToMany(() => Restaurant, (restaurant) => restaurant.owner)
-  restaurants: Restaurant[];
-
   @OneToMany(() => Review, (review) => review.user)
   reviews: Review[];
+
+  @OneToMany(() => Order, (order) => order.user)
+  orders: Order[];
+
+  @OneToMany(() => Restaurant, (restaurant) => restaurant.owner)
+  restaurants: Restaurant[];
 
   @CreateDateColumn()
   createdAt: Date;

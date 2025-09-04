@@ -4,7 +4,7 @@ import { config } from './src/config';
 const databaseConfig = config.database;
 
 export const dataSourceOptions: DataSourceOptions = {
-  type: 'postgres',
+  type: 'mysql',
   host: databaseConfig.host,
   port: databaseConfig.port,
   username: databaseConfig.username,
@@ -12,11 +12,14 @@ export const dataSourceOptions: DataSourceOptions = {
   database: databaseConfig.database,
   entities: ['dist/**/*.entity{.ts,.js}'],
   migrations: ['dist/migrations/*{.ts,.js}'],
-  synchronize: false,
+  synchronize: databaseConfig.synchronize,
   logging: databaseConfig.logging,
   migrationsRun: true,
-  ssl: databaseConfig.ssl as any,
   migrationsTableName: 'migrations',
+  timezone: databaseConfig.timezone,
+  charset: databaseConfig.charset,
+  supportBigNumbers: databaseConfig.supportBigNumbers,
+  bigNumberStrings: databaseConfig.bigNumberStrings,
 };
 
 const dataSource = new DataSource(dataSourceOptions);

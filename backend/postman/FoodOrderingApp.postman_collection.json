@@ -1,0 +1,233 @@
+{
+	"info": {
+		"_postman_id": "food-ordering-app-restaurants",
+		"name": "Food Ordering App - Restaurants",
+		"description": "Collection pour tester les endpoints des restaurants",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"owner@example.com\",\n    \"password\": \"password123\",\n    \"name\": \"John Doe\",\n    \"role\": \"owner\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					}
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"owner@example.com\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "Récupérer le token JET pour les requêtes authentifiées"
+					}
+				}
+			]
+		},
+		{
+			"name": "Restaurants",
+			"item": [
+				{
+					"name": "Create Restaurant",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Le Bon Repas\",\n    \"description\": \"Un restaurant convivial avec une cuisine traditionnelle\",\n    \"address\": \"123 Rue de la Paix, 75001 Paris\",\n    \"phone\": \"+33123456789\",\n    \"email\": \"contact@lebonrepas.fr\",\n    \"openingHours\": {\n        \"monday\": { \"open\": \"09:00\", \"close\": \"22:00\" },\n        \"tuesday\": { \"open\": \"09:00\", \"close\": \"22:00\" },\n        \"wednesday\": { \"open\": \"09:00\", \"close\": \"22:00\" },\n        \"thursday\": { \"open\": \"09:00\", \"close\": \"23:00\" },\n        \"friday\": { \"open\": \"09:00\", \"close\": \"23:00\" },\n        \"saturday\": { \"open\": \"10:00\", \"close\": \"23:00\" },\n        \"sunday\": { \"open\": \"10:00\", \"close\": \"21:00\" }\n    },\n    \"imageUrl\": \"https://example.com/restaurant1.jpg\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/restaurants",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"restaurants"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get All Restaurants",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/restaurants?page=1&limit=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"restaurants"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Restaurant by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/restaurants/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"restaurants",
+								":id"
+							]
+						}
+					}
+				},
+				{
+					"name": "Update Restaurant",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Le Bon Repas - Nouveau Nom\",\n    \"description\": "Description mise à jour avec une nouvelle image",
+    \"imageUrl\": "https://example.com/new-restaurant-image.jpg"
+}"
+						},
+						"url": {
+							"raw": "{{base_url}}/restaurants/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"restaurants",
+								":id"
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Restaurant",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/restaurants/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"restaurants",
+								":id"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get My Restaurants",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/restaurants/my-restaurants",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"restaurants",
+								"my-restaurants"
+							]
+						}
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000/api",
+			"type": "string"
+		},
+		{
+			"key": "access_token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

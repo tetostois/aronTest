@@ -65,7 +65,7 @@ export class OrdersService {
 
     // Créer les articles de la commande et calculer le total
     let totalAmount = 0;
-    const orderItems = [];
+    const orderItems: OrderItem[] = [];
 
     for (const item of createOrderDto.items) {
       const meal = meals.find(m => m.id === item.mealId);

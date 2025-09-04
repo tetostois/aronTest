@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -30,23 +31,29 @@ interface Restaurant {
   menu: MenuItem[];
 }
 
-export default function RestaurantPage({ params }: { params: { id: string } }) {
+export default function RestaurantPage() {
+  const params = useParams();
+  const restaurantId = params?.id as string;
+  
   const [restaurant, setRestaurant] = useState<Restaurant | null>(null);
   const [loading, setLoading] = useState(true);
   const [quantities, setQuantities] = useState<{[key: string]: number}>({});
   const [activeCategory, setActiveCategory] = useState<string>('');
 
   useEffect(() => {
+    if (!restaurantId) return;
+    
     // Simuler un chargement de données
     const fetchRestaurant = async () => {
       try {
+        setLoading(true);
         // Dans une vraie application, on ferait un appel API ici
-        // const response = await fetch(`/api/restaurants/${params.id}`);
+        // const response = await fetch(`/api/restaurants/${restaurantId}`);
         // const data = await response.json();
         
         // Données factices pour la démo
         const mockRestaurant: Restaurant = {
-          id: params.id,
+          id: restaurantId,
           name: 'Restaurant ' + params.id,
           description: 'Un délicieux restaurant proposant une cuisine raffinée avec des ingrédients frais et locaux.',
           image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80',
@@ -116,7 +123,7 @@ export default function RestaurantPage({ params }: { params: { id: string } }) {
     };
 
     fetchRestaurant();
-  }, [params.id]);
+  }, [restaurantId]);
 
   const handleQuantityChange = (itemId: string, newQuantity: number) => {
     if (newQuantity < 0) return;

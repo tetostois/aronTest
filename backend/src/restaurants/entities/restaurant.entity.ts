@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Meal } from '../../meals/entities/meal.entity';
+import { Order } from '../../orders/entities/order.entity';
 
 export type OpeningHours = {
   [key: string]: { open: string; close: string } | null;
@@ -42,7 +43,7 @@ export class Restaurant {
   @Column({ length: 100, nullable: true })
   email: string;
 
-  @Column({ type: 'jsonb', nullable: true })
+  @Column({ type: 'json', nullable: true })
   openingHours: OpeningHours;
 
   @Column({ type: 'varchar', nullable: true })
@@ -55,14 +56,16 @@ export class Restaurant {
   isActive: boolean;
 
   @ManyToOne(() => User, (user) => user.restaurants, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'ownerId' })
   owner: User;
 
   @Column({ type: 'uuid' })
   ownerId: string;
 
-  @OneToMany(() => Meal, (meal) => meal.restaurant)
+  @OneToMany(() => Meal, (meal) => meal.restaurant, { cascade: true })
   meals: Meal[];
+
+  @OneToMany(() => Order, (order) => order.restaurant)
+  orders: Order[];
 
   @CreateDateColumn()
   createdAt: Date;
