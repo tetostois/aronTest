@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './database/database.module';
 import { RestaurantsModule } from './restaurants/restaurants.module';
 import { MealsModule } from './meals/meals.module';
+import { OrdersModule } from './orders/orders.module';
 import { databaseConfig } from './config';
 
 @Module({
@@ -22,6 +23,7 @@ import { databaseConfig } from './config';
     AuthModule,
     RestaurantsModule,
     MealsModule,
+    OrdersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

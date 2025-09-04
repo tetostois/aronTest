@@ -5,7 +5,7 @@ import {
   BadRequestException
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import { Meal } from './entities/meal.entity';
 import { CreateMealDto } from './dto/create-meal.dto';
 import { UpdateMealDto } from './dto/update-meal.dto';
@@ -53,12 +53,25 @@ export class MealsService {
   async findOne(id: string): Promise<Meal> {
     const meal = await this.mealRepository.findOne({ 
       where: { id },
-      relations: ['restaurant'] // Inclure la relation avec le restaurant
+      relations: ['restaurant'] 
     });
+    
     if (!meal) {
-      throw new NotFoundException(`Repas avec l'ID ${id} non trouvé`);
+      throw new NotFoundException(`Repas avec l'ID "${id}" non trouvé`);
     }
+    
     return meal;
+  }
+
+  async findByIds(ids: string[]): Promise<Meal[]> {
+    if (!ids || ids.length === 0) {
+      return [];
+    }
+    
+    return await this.mealRepository.find({
+      where: { id: In(ids) },
+      relations: ['restaurant']
+    });
   }
 
   async update(id: string, updateMealDto: UpdateMealDto, userId?: string): Promise<Meal> {
