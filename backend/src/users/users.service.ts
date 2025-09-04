@@ -3,8 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
 
-export type CreateUserInput = Omit<User, 'id' | 'createdAt' | 'updatedAt'>;
-
 @Injectable()
 export class UsersService {
   constructor(
@@ -12,18 +10,17 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  async create(createUserInput: CreateUserInput): Promise<User> {
-    const existingUser = await this.findByEmail(createUserInput.email);
+  async create(user: User): Promise<User> {
+    const existingUser = await this.findByEmail(user.email);
     
     if (existingUser) {
       throw new ConflictException('Email already in use');
     }
 
-    const user = this.usersRepository.create(createUserInput);
     return this.usersRepository.save(user);
   }
 
-  async findByEmail(email: string): Promise<User | undefined> {
+  async findByEmail(email: string): Promise<User | null> {
     return this.usersRepository.findOne({ where: { email } });
   }
 

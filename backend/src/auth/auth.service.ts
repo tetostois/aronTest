@@ -1,8 +1,17 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { 
+  Injectable, 
+  UnauthorizedException, 
+  ConflictException,
+  BadRequestException
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import { LoginDto } from './dto/login.dto';
-import { User } from '../users/user.entity';
+import { RegisterDto } from './dto/register.dto';
+import { User, UserRole } from '../users/user.entity';
+import { LoginResponseDto } from './dto/login-response.dto';
+import { RegisterResponseDto } from './dto/register-response.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -20,11 +29,11 @@ export class AuthService {
     return null;
   }
 
-  async login(loginDto: LoginDto) {
+  async login(loginDto: LoginDto): Promise<LoginResponseDto> {
     const user = await this.validateUser(loginDto.email, loginDto.password);
     
     if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('Email ou mot de passe incorrect');
     }
 
     const payload = { 
@@ -41,22 +50,49 @@ export class AuthService {
         name: user.name,
         role: user.role
       }
-    };
+    } as LoginResponseDto;
   }
 
-  async register(registerDto: any) {
-    const user = await this.usersService.create(registerDto);
-    const { password, ...result } = user;
-    
-    const payload = { 
-      email: user.email, 
-      sub: user.id,
-      role: user.role 
-    };
+  async register(registerDto: RegisterDto): Promise<RegisterResponseDto> {
+    // Vérifier si l'email est déjà utilisé
+    const existingUser = await this.usersService.findByEmail(registerDto.email);
+    if (existingUser) {
+      throw new ConflictException('Cet email est déjà utilisé');
+    }
 
-    return {
-      access_token: this.jwtService.sign(payload),
-      user: result
+    // Vérifier que les mots de passe correspondent
+    if (registerDto.password !== registerDto.confirmPassword) {
+      throw new BadRequestException('Les mots de passe ne correspondent pas');
+    }
+
+    // Créer un nouvel utilisateur (le hachage du mot de passe sera géré par le hook @BeforeInsert)
+    const user = new User();
+    user.name = registerDto.name;
+    user.email = registerDto.email;
+    user.password = registerDto.password; // Le mot de passe sera haché automatiquement
+    user.role = registerDto.role || UserRole.USER;
+
+    // Sauvegarder l'utilisateur dans la base de données
+    const savedUser = await this.usersService.create(user);
+
+    // Générer le token JWT
+    const payload = { 
+      email: savedUser.email, 
+      sub: savedUser.id,
+      role: savedUser.role 
     };
+    const access_token = this.jwtService.sign(payload);
+
+    // Ne pas renvoyer le mot de passe
+    const { password, ...result } = savedUser;
+    
+    return {
+      id: result.id,
+      email: result.email,
+      name: result.name,
+      role: result.role,
+      createdAt: result.createdAt,
+      access_token
+    } as RegisterResponseDto;
   }
 }
